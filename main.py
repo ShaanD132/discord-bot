@@ -16,7 +16,7 @@ count = [0]
 
 def get_url():
     valid = False
-    f = open('hottie1.txt')
+    f = open('hottie.txt')
     urls = f.readlines()
     y = len(urls)
     while valid == False:
