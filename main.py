@@ -83,6 +83,7 @@ async def on_message(message):
 
     if message.content.startswith("$time"):
         author = message.author.name
+        db = mongo.lebbk
         collection = db["time"]
         post = collection.find_one({"user": author})
         embed = discord.Embed(title = "Time with Le Bobok ⏳", description = "You have spent " + str(post["time"]) + " minutes on Le Bobok", color = 0xb896ff)
