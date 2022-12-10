@@ -31,7 +31,7 @@ client = discord.Client(intents=intents)
 @client.event
 async def on_ready():
     print("Logged in.")
-    time.start()
+    #time.start()
 
 @client.event
 async def on_message(message):
