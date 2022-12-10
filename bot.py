@@ -3,7 +3,7 @@ from discord.ext import tasks
 import pymongo
 import os
 
-token = os.getenv(DISCORD_TOKEN)
+token = os.getenv("DISCORD_TOKEN")
 
 mongo = pymongo.MongoClient("mongodb+srv://shaand:Sana132@lebbk.urxltwo.mongodb.net/?retryWrites=true&w=majority")
 db = mongo.lebbk
