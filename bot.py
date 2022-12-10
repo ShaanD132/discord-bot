@@ -1,6 +1,9 @@
 import discord
 from discord.ext import tasks
 import pymongo
+import os
+
+KEY = os.getenv("KEY")
 
 mongo = pymongo.MongoClient("mongodb+srv://shaand:Sana132@lebbk.urxltwo.mongodb.net/?retryWrites=true&w=majority")
 db = mongo.lebbk
@@ -75,4 +78,4 @@ async def time():
         collection.update_one({"user": user}, { "$set": { "time": time1 } })
 
 
-client.run("ODI0NTI0NDUxODczMjkyMzE5.GR84x_.POHPNd_uBnIeoBtp0sRWYLHqO5aUq1bDiArB0A")
+client.run(KEY)
