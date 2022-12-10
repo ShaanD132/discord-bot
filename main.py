@@ -31,7 +31,7 @@ client = discord.Client(intents=intents)
 @client.event
 async def on_ready():
     print("Logged in.")
-    #time.start()
+    time.start()
 
 @client.event
 async def on_message(message):
@@ -55,10 +55,10 @@ async def on_message(message):
             await message.channel.send(embed = embed)
 
     if message.content.startswith("$time"):
+        print("hello")
         author = message.author.name
         collection = db["time"]
         post = collection.find_one({"user": author})
-        print("hello")
         embed = discord.Embed(title = "Time with Le Bobok ⏳", description = "You have spent " + str(post["time"]) + " minutes on Le Bobok", color = 0xb896ff)
         await message.channel.send(embed = embed)
 
