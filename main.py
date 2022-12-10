@@ -23,6 +23,7 @@ collection.update_one({"user":"Shaan"}, { "$set": { "time": 2 } })
 
 intents = discord.Intents.default()
 intents.messages = True
+intents.message_content = True
 intents.presences = True
 intents.members = True
 
