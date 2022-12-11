@@ -111,7 +111,7 @@ async def on_message(message):
         message1 = message.content
         message1 = message1.rstrip()
         id1 = message.guild.id
-        prefix = "You"
+        prefix = "You have"
         if (id1 == 824339628424167464):
             db = mongo.lebbk
         elif (id1 == 365086888496726018):
@@ -124,7 +124,7 @@ async def on_message(message):
             target = collection.find_one({"user": message1})
             if target != None:
                 author = target["user"]
-                prefix = author
+                prefix = author + " has"
         else:
             author = message.author.name
         post = collection.find_one({"user": author})
@@ -150,9 +150,9 @@ async def on_message(message):
 
             time1 = time_h + " " + h_str + " and " + time_m + " " + m_str
             if (id1 == 824339628424167464):
-                embed = discord.Embed(title = "Time with Le Bobok ⏳", description = prefix + " have spent " + str(time1) + " with Le Bobok", color = 0xb896ff)
+                embed = discord.Embed(title = "Time with Le Bobok ⏳", description = prefix + " spent " + str(time1) + " with Le Bobok", color = 0xb896ff)
             else:
-                embed = discord.Embed(title = "Time on Server", description = prefix + " have spent " + str(time1) + " on this server", color = 0xb896ff)
+                embed = discord.Embed(title = "Time on Server", description = prefix + " spent " + str(time1) + " on this server", color = 0xb896ff)
             await message.channel.send(embed = embed)
     if message.content.startswith("$jisakam"):
         embed = discord.Embed(title = "Zakam", description = "He's just a friend", color = 0xb896ff)
