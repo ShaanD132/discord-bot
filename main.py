@@ -116,6 +116,10 @@ async def on_message(message):
             time1 = time_h + " " + h_str + " and " + time_m + " " + m_str
             embed = discord.Embed(title = "Time with Le Bobok ⏳", description = "You have spent " + str(time1) + " with Le Bobok", color = 0xb896ff)
             await message.channel.send(embed = embed)
+    if message.content.startswith("$jisakam"):
+        embed = discord.Embed(title = "Zakam", description = "Loganis 👹 zoli", color = 0xb896ff)
+        await message.channel.send(embed = embed)
+        
 
     if message.content.startswith("$hottie"):
         url = get_url()
