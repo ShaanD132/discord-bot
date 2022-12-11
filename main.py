@@ -29,7 +29,7 @@ def get_url():
     urls = f.readlines()
     y = len(urls)
     while valid == False:
-        line_no = random.randint(0, y)
+        line_no = random.randint(0, y-1)
         url = urls[line_no]
         repeat = False
         if url in hottie_arr:
