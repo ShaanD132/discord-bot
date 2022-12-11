@@ -117,7 +117,7 @@ async def on_message(message):
             embed = discord.Embed(title = "Time with Le Bobok ⏳", description = "You have spent " + str(time1) + " with Le Bobok", color = 0xb896ff)
             await message.channel.send(embed = embed)
     if message.content.startswith("$jisakam"):
-        embed = discord.Embed(title = "Zakam", description = "Loganis 👹 zoli", color = 0xb896ff)
+        embed = discord.Embed(title = "Zakam", description = "He's just a friend", color = 0xb896ff)
         await message.channel.send(embed = embed)
         
 
