@@ -1,3 +1,11 @@
+#new_item = {"user": "Shaan", "time":0}
+#collection.insert_one(new_item)
+"""
+collection = db["time"]
+time1 = 1
+await message.channel.send("hi")
+collection.update_one({"user":"Shaan"}, { "$set": { "time": 2 } })
+"""
 import discord
 from discord.ext import tasks
 import pymongo
@@ -9,7 +17,8 @@ token = os.getenv("DISCORD_TOKEN")
 
 mongo = pymongo.MongoClient("mongodb+srv://shaand:Sana132@lebbk.urxltwo.mongodb.net/?retryWrites=true&w=majority")
 
-channels = [824351465018490931, 964896100223950858, 824524626361188403, 824565516920160286, 824339628659965983, 824354320120152106, 824354228847509504, 951085083085930496, 951085037040861214, 968134067344265276]
+lebbk_channels = [824351465018490931, 964896100223950858, 824524626361188403, 824565516920160286, 824339628659965983, 824354320120152106, 824354228847509504, 951085083085930496, 951085037040861214, 968134067344265276]
+juno_channels = [458678727916912640]
 
 hottie_arr = [0] * 10
 count = [0]
@@ -35,15 +44,6 @@ def get_url():
     f.close()
     return url
 
-#new_item = {"user": "Shaan", "time":0}
-#collection.insert_one(new_item)
-"""
-collection = db["time"]
-time1 = 1
-await message.channel.send("hi")
-collection.update_one({"user":"Shaan"}, { "$set": { "time": 2 } })
-"""
-
 
 intents = discord.Intents.default()
 intents.messages = True
@@ -65,7 +65,11 @@ async def on_message(message):
 
     if message.content.startswith("$setup"):
         author = message.author.name
-        db = mongo.lebbk
+        id1 = message.guild.id
+        if (id1 == 824339628424167464):
+            db = mongo.lebbk
+        else:
+            return
         collection = db["time"]
         exists = False
         for item in collection.find():
@@ -84,7 +88,11 @@ async def on_message(message):
     if message.content.startswith("$time"):
         message1 = message.content
         message1 = message1.rstrip()
-        db = mongo.lebbk
+        id1 = message.guild.id
+        if (id1 == 824339628424167464):
+            db = mongo.lebbk
+        else:
+            return
         collection = db["time"]
         message1 = message1[5:]
         if (message1 != ""):
@@ -133,7 +141,7 @@ async def time():
     active_users = []
     db = mongo.lebbk
 
-    for channel in channels:
+    for channel in lebbk_channels:
         channel1 = client.get_channel(channel)
         members1 = channel1.members
         for member in members1:
@@ -147,5 +155,22 @@ async def time():
             time1 = post["time"]
             time1 += 1
             collection.update_one({"user": user}, { "$set": { "time": time1 } })
+
+    """active_users = []
+    db = mongo.juno
+    for channel in juno_channels:
+        channel1 = client.get_channel(channel)
+        members1 = channel1.members
+        for member in members1:
+            active_users.append(member.name)
+
+    print(active_users)
+    for user in active_users:
+        collection = db["time"]
+        post = collection.find_one({"user":user})
+        if (post != None):
+            time1 = post["time"]
+            time1 += 1
+            collection.update_one({"user": user}, { "$set": { "time": time1 } })"""
 
 client.run(token)
