@@ -88,12 +88,12 @@ async def on_message(message):
         collection = db["time"]
         if (message1[4:] != ""):
             target = collection.find_one({"user": message1[4:]})
-            if target["time"] != None:
+            if target != None:
                 author = target["user"]
             else:
                 author = message.author.name
         post = collection.find_one({"user": author})
-        if (post["time"] == None):
+        if (post == None):
             embed = discord.Embed(title = "Taey To Fou?", description = "Use $setup first to be added to the database", color = 0xb896ff)
             await message.channel.send(embed = embed)
         else:
@@ -136,7 +136,7 @@ async def time():
     for user in active_users:
         collection = db["time"]
         post = collection.find_one({"user":user})
-        if (post["time"] != None):
+        if (post != None):
             time1 = post["time"]
             time1 += 1
             collection.update_one({"user": user}, { "$set": { "time": time1 } })
