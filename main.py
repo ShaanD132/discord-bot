@@ -68,8 +68,8 @@ async def on_message(message):
         id1 = message.guild.id
         if (id1 == 824339628424167464):
             db = mongo.lebbk
-        else:
-            return
+        elif (id1 == 365086888496726018):
+            db = mongo.juno
         collection = db["time"]
         exists = False
         for item in collection.find():
@@ -79,7 +79,6 @@ async def on_message(message):
             embed = discord.Embed(title = "Invalid Command ❌", description = "You have already been added to the Database.", color = 0xb896ff)
             await message.channel.send(embed = embed)
         else:
-            db = mongo.lebbk
             collection = db["time"]
             collection.insert_one({"user": author, "time": 0})
             embed = discord.Embed(title = "Added ✅", description = "Added to Database.", color = 0xb896ff)
@@ -91,8 +90,8 @@ async def on_message(message):
         id1 = message.guild.id
         if (id1 == 824339628424167464):
             db = mongo.lebbk
-        else:
-            return
+        elif (id1 == 365086888496726018):
+            db = mongo.juno
         collection = db["time"]
         message1 = message1[5:]
         if (message1 != ""):
@@ -105,7 +104,10 @@ async def on_message(message):
             author = message.author.name
         post = collection.find_one({"user": author})
         if (post == None):
-            embed = discord.Embed(title = "Taey To Fou?", description = "Use $setup first to be added to the database", color = 0xb896ff)
+            if (id1 == 365086888496726018):
+                embed = discord.Embed(title = "Taey To Fou?", description = "Use $setup first to be added to the database", color = 0xb896ff)
+            else:
+                embed = discord.Embed(title = "You Crazy?", description = "Use $setup first to be added to the database", color = 0xb896ff)
             await message.channel.send(embed = embed)
         else:
             time1 = post["time"]
@@ -122,7 +124,10 @@ async def on_message(message):
                 m_str = "minutes"
 
             time1 = time_h + " " + h_str + " and " + time_m + " " + m_str
-            embed = discord.Embed(title = "Time with Le Bobok ⏳", description = "You have spent " + str(time1) + " with Le Bobok", color = 0xb896ff)
+            if (id1 == 824339628424167464):
+                embed = discord.Embed(title = "Time with Le Bobok ⏳", description = "You have spent " + str(time1) + " with Le Bobok", color = 0xb896ff)
+            else:
+                embed = discord.Embed(title = "Time on Server", description = "You have spent " + str(time1) + " on this server", color = 0xb896ff)
             await message.channel.send(embed = embed)
     if message.content.startswith("$jisakam"):
         embed = discord.Embed(title = "Zakam", description = "He's just a friend", color = 0xb896ff)
@@ -156,7 +161,7 @@ async def time():
             time1 += 1
             collection.update_one({"user": user}, { "$set": { "time": time1 } })
 
-    """active_users = []
+    active_users = []
     db = mongo.juno
     for channel in juno_channels:
         channel1 = client.get_channel(channel)
@@ -171,6 +176,6 @@ async def time():
         if (post != None):
             time1 = post["time"]
             time1 += 1
-            collection.update_one({"user": user}, { "$set": { "time": time1 } })"""
+            collection.update_one({"user": user}, { "$set": { "time": time1 } })
 
 client.run(token)
