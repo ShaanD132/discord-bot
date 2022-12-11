@@ -90,10 +90,9 @@ async def on_message(message):
             target = collection.find_one({"user": message1[4:]})
             if target["time"] != None:
                 author = target["user"]
-        else:
-            author = message.author.name
+            else:
+                author = message.author.name
         post = collection.find_one({"user": author})
-
         if (post["time"] == None):
             embed = discord.Embed(title = "Taey To Fou?", description = "Use $setup first to be added to the database", color = 0xb896ff)
             await message.channel.send(embed = embed)
