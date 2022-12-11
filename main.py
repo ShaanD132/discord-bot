@@ -82,10 +82,18 @@ async def on_message(message):
             await message.channel.send(embed = embed)
 
     if message.content.startswith("$time"):
-        author = message.author.name
+        message1 = message.content
+        message1 = message1.rstrip()
         db = mongo.lebbk
         collection = db["time"]
+        if (message1[4:] != ""):
+            target = collection.find_one({"user": message1[4:]})
+            if target["time"] != None:
+                author = target["user"]
+        else:
+            author = message.author.name
         post = collection.find_one({"user": author})
+
         if (post["time"] == None):
             embed = discord.Embed(title = "Taey To Fou?", description = "Use $setup first to be added to the database", color = 0xb896ff)
             await message.channel.send(embed = embed)
