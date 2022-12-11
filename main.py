@@ -47,7 +47,7 @@ collection.update_one({"user":"Shaan"}, { "$set": { "time": 2 } })
 
 intents = discord.Intents.default()
 intents.messages = True
-intents.message_content = True
+#intents.message_content = True
 intents.presences = True
 intents.members = True
 
@@ -86,12 +86,15 @@ async def on_message(message):
         message1 = message1.rstrip()
         db = mongo.lebbk
         collection = db["time"]
-        if (message1[4:] != ""):
-            target = collection.find_one({"user": message1[4:]})
+        message1 = message1[5:]
+        if (message1 != ""):
+            message1 = message1.lstrip()
+            print(message1)
+            target = collection.find_one({"user": message1})
             if target != None:
                 author = target["user"]
-            else:
-                author = message.author.name
+        else:
+            author = message.author.name
         post = collection.find_one({"user": author})
         if (post == None):
             embed = discord.Embed(title = "Taey To Fou?", description = "Use $setup first to be added to the database", color = 0xb896ff)
