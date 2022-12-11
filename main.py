@@ -63,7 +63,7 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    if message.content.startswith("$setup"):
+    """if message.content.startswith("$setup"):
         author = message.author.name
         id1 = message.guild.id
         if (id1 == 824339628424167464):
@@ -83,6 +83,29 @@ async def on_message(message):
             collection.insert_one({"user": author, "time": 0})
             embed = discord.Embed(title = "Added ✅", description = "Added to Database.", color = 0xb896ff)
             await message.channel.send(embed = embed)
+
+    if message.content.startswith("$doit"):
+        id1 = message.guild.id
+        guild = message.guild
+        if (id1 == 365086888496726018):
+            db = mongo.juno
+        elif (id1 == 824339628424167464):
+            db = mongo.lebbk
+        collection = db["time"]
+        members1 = guild.members
+        for member in members1:
+            exists = False
+            author = member.name
+            for item in collection.find():
+                if (item["user"] == author):
+                    exists = True
+            if (exists == True):
+                print("alr in")
+            else:
+                print(member.name)
+                collection = db["time"]
+                collection.insert_one({"user": author, "time": 0})
+                print("added")"""
 
     if message.content.startswith("$time"):
         message1 = message.content
@@ -132,7 +155,6 @@ async def on_message(message):
     if message.content.startswith("$jisakam"):
         embed = discord.Embed(title = "Zakam", description = "He's just a friend", color = 0xb896ff)
         await message.channel.send(embed = embed)
-        
 
     if message.content.startswith("$hottie"):
         url = get_url()
