@@ -93,7 +93,17 @@ async def on_message(message):
             time1 = post["time"]
             time_h = str(time1 // 60)
             time_m = str(time1 % 60)
-            time1 = time_h + "hours and " + time_m + " minutes"
+            if (time_h == "1"):
+                h_str = "hour"
+            else:
+                h_str = "hours"
+
+            if (time_m == "1"):
+                m_str = "minute"
+            else:
+                m_str = "minutes"
+
+            time1 = time_h + " " + h_str + " and " + time_m + " " + m_str
             embed = discord.Embed(title = "Time with Le Bobok ⏳", description = "You have spent " + str(time1) + " with Le Bobok", color = 0xb896ff)
             await message.channel.send(embed = embed)
 
