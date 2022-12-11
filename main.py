@@ -86,8 +86,16 @@ async def on_message(message):
         db = mongo.lebbk
         collection = db["time"]
         post = collection.find_one({"user": author})
-        embed = discord.Embed(title = "Time with Le Bobok ⏳", description = "You have spent " + str(post["time"]) + " minutes on Le Bobok", color = 0xb896ff)
-        await message.channel.send(embed = embed)
+        if (post["time"] == None):
+            embed = discord.Embed(title = "Taey To Fou?", description = "Use $setup first to be added to the database", color = 0xb896ff)
+            await message.channel.send(embed = embed)
+        else:
+            time1 = post["time"]
+            time_h = str(time1 // 60)
+            time_m = str(time1 % 60)
+            time1 = time_h + "hours and " + time_m + " minutes"
+            embed = discord.Embed(title = "Time with Le Bobok ⏳", description = "You have spent " + str(time1) + " with Le Bobok", color = 0xb896ff)
+            await message.channel.send(embed = embed)
 
     if message.content.startswith("$hottie"):
         url = get_url()
@@ -111,8 +119,9 @@ async def time():
     for user in active_users:
         collection = db["time"]
         post = collection.find_one({"user":user})
-        time1 = post["time"]
-        time1 += 1
-        collection.update_one({"user": user}, { "$set": { "time": time1 } })
+        if (post["time"] != None):
+            time1 = post["time"]
+            time1 += 1
+            collection.update_one({"user": user}, { "$set": { "time": time1 } })
 
 client.run(token)
