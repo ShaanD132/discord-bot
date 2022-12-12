@@ -17,6 +17,14 @@ token = os.getenv("DISCORD_TOKEN")
 
 mongo = pymongo.MongoClient("mongodb+srv://shaand:Sana132@lebbk.urxltwo.mongodb.net/?retryWrites=true&w=majority")
 
+intents = discord.Intents.default()
+intents.messages = True
+intents.message_content = True
+intents.presences = True
+intents.members = True
+
+client = discord.Client(intents=intents)
+
 lebbk_channels = [824351465018490931, 964896100223950858, 824524626361188403, 824565516920160286, 824339628659965983, 824354320120152106, 824354228847509504, 951085083085930496, 951085037040861214, 968134067344265276]
 juno_channels = [636804198918258698, 458678727916912640, 797415731494780978, 458678879351996439, 484236105814769667, 404993149522542634, 414807748274814996]
 
@@ -44,14 +52,6 @@ def get_url():
     f.close()
     return url
 
-
-intents = discord.Intents.default()
-intents.messages = True
-intents.message_content = True
-intents.presences = True
-intents.members = True
-
-client = discord.Client(intents=intents)
 
 @client.event
 async def on_ready():
@@ -154,6 +154,52 @@ async def on_message(message):
             else:
                 embed = discord.Embed(title = "Time on Server", description = prefix + " spent " + str(time1) + " on this server", color = 0xb896ff)
             await message.channel.send(embed = embed)
+
+    if message.content.startswith("$lb"):
+        id1 = message.guild.id
+        if (id1 == 824339628424167464):
+            db = mongo.lebbk
+        elif (id1 == 365086888496726018):
+            db = mongo.juno
+        collection = db["time"]
+        users = []
+        times = []
+        for user in collection.find():
+            times.append(user["time"])
+            users.append(user["user"])
+        for _ in range (0, len(times)):
+            for j in range(0, len(times) -1):
+                if (times[j] < times[j+1]):
+                    temp = times[j]
+                    times[j] = times[j+1]
+                    times[j+1] = temp
+                    temp1 = users[j]
+                    users[j] = users[j+1]
+                    users[j+1] = temp1
+        embed = discord.Embed(title = "Leaderboard", description = "", color = 0x42559e)
+        for i in range(10):
+            time_h = times[i] // 60
+            time_m = times[i] % 60
+            if (time_h > 1):
+                time_str = str(time_h) + " hours and " + str(time_m) + " minutes"
+            else:
+                time_str = str(time_h) + " hour and " + str(time_m) + " minutes"
+            name_str = str(i+1) + ". " + users[i]
+            value_str = "Has spent " + time_str
+            embed.add_field(name = name_str, value = value_str, inline = False)
+
+        author = users.index(message.author.name) + 1
+        time_u = times[author] // 60
+        time_um = times[author] % 60
+        if (time_u > 1):
+            time_str1 = "You have spent " + str(time_u) + " hours and " + str(time_um) + " minutes"
+        else:
+            time_str1 = "You have spent " + str(time_u) + " hour and " + str(time_m) + " minutes"
+        name_str1 = "Your Position: " + str(author)
+
+        embed.add_field(name = name_str1, value = time_str1, inline = False)
+        await message.channel.send(embed = embed)
+
     if message.content.startswith("$jisakam"):
         embed = discord.Embed(title = "Zakam", description = "He's just a friend", color = 0xb896ff)
         await message.channel.send(embed = embed)
