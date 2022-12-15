@@ -188,14 +188,14 @@ async def on_message(message):
             value_str = "Has spent " + time_str
             embed.add_field(name = name_str, value = value_str, inline = False)
 
-        author = users.index(message.author.name) + 1
+        author = users.index(message.author.name)
         time_u = times[author] // 60
         time_um = times[author] % 60
         if (time_u > 1):
             time_str1 = "You have spent " + str(time_u) + " hours and " + str(time_um) + " minutes"
         else:
             time_str1 = "You have spent " + str(time_u) + " hour and " + str(time_m) + " minutes"
-        name_str1 = "Your Position: " + str(author)
+        name_str1 = "Your Position: " + str(author + 1)
 
         embed.add_field(name = name_str1, value = time_str1, inline = False)
         await message.channel.send(embed = embed)
