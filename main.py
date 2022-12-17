@@ -1,11 +1,3 @@
-#new_item = {"user": "Shaan", "time":0}
-#collection.insert_one(new_item)
-"""
-collection = db["time"]
-time1 = 1
-await message.channel.send("hi")
-collection.update_one({"user":"Shaan"}, { "$set": { "time": 2 } })
-"""
 import discord
 from discord.ext import tasks
 import pymongo
@@ -62,50 +54,6 @@ async def on_ready():
 async def on_message(message):
     if message.author == client.user:
         return
-
-    """if message.content.startswith("$setup"):
-        author = message.author.name
-        id1 = message.guild.id
-        if (id1 == 824339628424167464):
-            db = mongo.lebbk
-        elif (id1 == 365086888496726018):
-            db = mongo.juno
-        collection = db["time"]
-        exists = False
-        for item in collection.find():
-            if (item["user"] == author):
-                exists = True
-        if (exists == True):
-            embed = discord.Embed(title = "Invalid Command ❌", description = "You have already been added to the Database.", color = 0xb896ff)
-            await message.channel.send(embed = embed)
-        else:
-            collection = db["time"]
-            collection.insert_one({"user": author, "time": 0})
-            embed = discord.Embed(title = "Added ✅", description = "Added to Database.", color = 0xb896ff)
-            await message.channel.send(embed = embed)
-
-    if message.content.startswith("$doit"):
-        id1 = message.guild.id
-        guild = message.guild
-        if (id1 == 365086888496726018):
-            db = mongo.juno
-        elif (id1 == 824339628424167464):
-            db = mongo.lebbk
-        collection = db["time"]
-        members1 = guild.members
-        for member in members1:
-            exists = False
-            author = member.name
-            for item in collection.find():
-                if (item["user"] == author):
-                    exists = True
-            if (exists == True):
-                print("alr in")
-            else:
-                print(member.name)
-                collection = db["time"]
-                collection.insert_one({"user": author, "time": 0})
-                print("added")"""
 
     if message.content.startswith("$time"):
         message1 = message.content
