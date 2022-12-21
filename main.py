@@ -207,10 +207,8 @@ async def on_message(message):
         embed.set_image(url = url)
         await message.channel.send(embed = embed)
 
-count = 0
 @tasks.loop(seconds = 60)
 async def time():
-    global count
     active_users = []
     db = mongo.lebbk
     alone = []
