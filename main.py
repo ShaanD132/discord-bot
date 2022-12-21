@@ -5,13 +5,13 @@ import os
 import asyncio
 import random
 
-token = os.getenv("DISCORD_TOKEN")
+#token = os.getenv("DISCORD_TOKEN")
 
 mongo = pymongo.MongoClient("mongodb+srv://shaand:Sana132@lebbk.urxltwo.mongodb.net/?retryWrites=true&w=majority")
 
 intents = discord.Intents.default()
 intents.messages = True
-intents.message_content = True
+#intents.message_content = True
 intents.presences = True
 intents.members = True
 
@@ -102,6 +102,54 @@ async def on_message(message):
             else:
                 embed = discord.Embed(title = "Time on Server", description = prefix + " spent " + str(time1) + " on this server", color = 0xb896ff)
             await message.channel.send(embed = embed)
+    
+    if message.content.startswith("$alone"):
+        message1 = message.content
+        message1 = message1.rstrip()
+        id1 = message.guild.id
+        prefix = "You have"
+        if (id1 == 824339628424167464):
+            db = mongo.lebbk
+        elif (id1 == 365086888496726018):
+            db = mongo.juno
+        collection = db["time"]
+        message1 = message1[6:]
+        if (message1 != ""):
+            message1 = message1.lstrip()
+            print(message1)
+            target = collection.find_one({"user": message1})
+            if target != None:
+                author = target["user"]
+                prefix = author + " has"
+        else:
+            author = message.author.name
+        post = collection.find_one({"user": author})
+        if (post == None):
+            if (id1 == 824339628424167464):
+                embed = discord.Embed(title = "Taey To Fou?", description = "Use $setup first to be added to the database", color = 0xb896ff)
+            else:
+                embed = discord.Embed(title = "You Crazy?", description = "Use $setup first to be added to the database", color = 0xb896ff)
+            await message.channel.send(embed = embed)
+        else:
+            time1 = post["alone_time"]
+            time_h = str(time1 // 60)
+            time_m = str(time1 % 60)
+            if (time_h == "1"):
+                h_str = "hour"
+            else:
+                h_str = "hours"
+
+            if (time_m == "1"):
+                m_str = "minute"
+            else:
+                m_str = "minutes"
+
+            time1 = time_h + " " + h_str + " and " + time_m + " " + m_str
+            if (id1 == 824339628424167464):
+                embed = discord.Embed(title = "Time in Le Bobok Alone 😔", description = prefix + " spent " + str(time1) + " alone", color = 0x630008)
+            else:
+                embed = discord.Embed(title = "Time on Server", description = prefix + " spent " + str(time1) + " on this server", color = 0x630008)
+            await message.channel.send(embed = embed)
 
     if message.content.startswith("$lb"):
         id1 = message.guild.id
@@ -159,14 +207,20 @@ async def on_message(message):
         embed.set_image(url = url)
         await message.channel.send(embed = embed)
 
+count = 0
 @tasks.loop(seconds = 60)
 async def time():
+    global count
     active_users = []
     db = mongo.lebbk
+    alone = []
 
     for channel in lebbk_channels:
         channel1 = client.get_channel(channel)
         members1 = channel1.members
+        if (len(members1) == 1):
+            for member in members1:
+                alone.append(member.name)
         for member in members1:
             active_users.append(member.name)
 
@@ -175,9 +229,14 @@ async def time():
         collection = db["time"]
         post = collection.find_one({"user":user})
         if (post != None):
-            time1 = post["time"]
-            time1 += 1
-            collection.update_one({"user": user}, { "$set": { "time": time1 } })
+            if (user in alone):
+                time2 = post["alone_time"]
+                time2 += 2
+                collection.update_one({"user": user}, { "$set": { "alone_time": time2 } })
+            else:
+                time1 = post["time"]
+                time1 += 1
+                collection.update_one({"user": user}, { "$set": { "time": time1 } })
 
     active_users = []
     db = mongo.juno
@@ -196,4 +255,4 @@ async def time():
             time1 += 1
             collection.update_one({"user": user}, { "$set": { "time": time1 } })
 
-client.run(token)
+client.run("ODI0NTI0NDUxODczMjkyMzE5.GYMutL.4GGn_IDpa-65msJN4A3fJLDHyWLIZTF7RZWTco")
