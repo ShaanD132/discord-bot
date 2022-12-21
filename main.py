@@ -5,13 +5,13 @@ import os
 import asyncio
 import random
 
-#token = os.getenv("DISCORD_TOKEN")
+token = os.getenv("DISCORD_TOKEN")
 
 mongo = pymongo.MongoClient("mongodb+srv://shaand:Sana132@lebbk.urxltwo.mongodb.net/?retryWrites=true&w=majority")
 
 intents = discord.Intents.default()
 intents.messages = True
-#intents.message_content = True
+intents.message_content = True
 intents.presences = True
 intents.members = True
 
@@ -255,4 +255,4 @@ async def time():
             time1 += 1
             collection.update_one({"user": user}, { "$set": { "time": time1 } })
 
-client.run("ODI0NTI0NDUxODczMjkyMzE5.GYMutL.4GGn_IDpa-65msJN4A3fJLDHyWLIZTF7RZWTco")
+client.run(token)
