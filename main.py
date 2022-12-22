@@ -195,6 +195,50 @@ async def on_message(message):
 
         embed.add_field(name = name_str1, value = time_str1, inline = False)
         await message.channel.send(embed = embed)
+    if message.content.startswith("$alone lb"):
+        id1 = message.guild.id
+        if (id1 == 824339628424167464):
+            db = mongo.lebbk
+        elif (id1 == 365086888496726018):
+            db = mongo.juno
+        collection = db["time"]
+        users = []
+        times = []
+        for user in collection.find():
+            times.append(user["alone_time"])
+            users.append(user["user"])
+        for _ in range (0, len(times)):
+            for j in range(0, len(times) -1):
+                if (times[j] < times[j+1]):
+                    temp = times[j]
+                    times[j] = times[j+1]
+                    times[j+1] = temp
+                    temp1 = users[j]
+                    users[j] = users[j+1]
+                    users[j+1] = temp1
+        embed = discord.Embed(title = "Alone Leaderboard", description = "", color = 0x42559e)
+        for i in range(10):
+            time_h = times[i] // 60
+            time_m = times[i] % 60
+            if (time_h > 1):
+                time_str = str(time_h) + " hours and " + str(time_m) + " minutes"
+            else:
+                time_str = str(time_h) + " hour and " + str(time_m) + " minutes"
+            name_str = str(i+1) + ". " + users[i]
+            value_str = "Has spent " + time_str
+            embed.add_field(name = name_str, value = value_str, inline = False)
+
+        author = users.index(message.author.name)
+        time_u = times[author] // 60
+        time_um = times[author] % 60
+        if (time_u > 1):
+            time_str1 = "You have spent " + str(time_u) + " hours and " + str(time_um) + " minutes"
+        else:
+            time_str1 = "You have spent " + str(time_u) + " hour and " + str(time_m) + " minutes"
+        name_str1 = "Your Position: " + str(author + 1)
+
+        embed.add_field(name = name_str1, value = time_str1, inline = False)
+        await message.channel.send(embed = embed)
 
     if message.content.startswith("$jisakam"):
         embed = discord.Embed(title = "Zakam", description = "He's just a friend", color = 0xb896ff)
