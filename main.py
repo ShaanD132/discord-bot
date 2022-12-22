@@ -195,7 +195,7 @@ async def on_message(message):
 
         embed.add_field(name = name_str1, value = time_str1, inline = False)
         await message.channel.send(embed = embed)
-    if message.content.startswith("$lb_alone"):
+    if message.content.startswith("$alone_lb"):
         id1 = message.guild.id
         if (id1 == 824339628424167464):
             db = mongo.lebbk
