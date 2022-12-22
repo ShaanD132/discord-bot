@@ -195,7 +195,7 @@ async def on_message(message):
 
         embed.add_field(name = name_str1, value = time_str1, inline = False)
         await message.channel.send(embed = embed)
-    if message.content.startswith("$alone lb"):
+    if message.content.startswith("$lb_alone"):
         id1 = message.guild.id
         if (id1 == 824339628424167464):
             db = mongo.lebbk
@@ -241,7 +241,7 @@ async def on_message(message):
         await message.channel.send(embed = embed)
 
     if message.content.startswith("$jisakam"):
-        embed = discord.Embed(title = "Zakam", description = "He's just a friend", color = 0xb896ff)
+        embed = discord.Embed(title = "Zakam", description = "He's just a friend", color = 0x630008)
         await message.channel.send(embed = embed)
 
     if message.content.startswith("$hottie"):
