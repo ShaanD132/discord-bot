@@ -217,6 +217,7 @@ async def on_message(message):
                     users[j] = users[j+1]
                     users[j+1] = temp1
         embed = discord.Embed(title = "Alone Leaderboard", description = "", color = 0x42559e)
+        
         for i in range(10):
             time_h = times[i] // 60
             time_m = times[i] % 60
