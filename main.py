@@ -331,6 +331,7 @@ async def project_50():
         embed.add_field(name = "𝟴: NoFap", value = "🧴", inline = False)
         message = await channel.send(embed = embed)
 
+        count = 0
         for _ in collection.find():
             count += 1
         current_day = count + 1
