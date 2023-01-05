@@ -330,7 +330,10 @@ async def project_50():
         embed.add_field(name = "𝟳: Journal Properly", value = "✍️", inline = False)
         embed.add_field(name = "𝟴: NoFap", value = "🧴", inline = False)
         message = await channel.send(embed = embed)
-        current_day = len(collection.find()) + 1
+
+        for _ in collection.find():
+            count += 1
+        current_day = count + 1
         proj50_id = message.id
         post = collection.insert_one({"id": message.id, "date" : date, "habit1": [], "habit2": [], "habit3": [], "habit4": [], "habit5": [], "habit6": [], "habit7": [], "habit8": [], "day": current_day})
 
