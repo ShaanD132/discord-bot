@@ -319,8 +319,15 @@ async def project_50():
             exists = True
 
     if (exists == False):
+        count = 0
+        for _ in collection.find():
+            count += 1
+        current_day = count + 1
+        proj50_id = message.id
+        post = collection.insert_one({"id": message.id, "date" : date, "habit1": [], "habit2": [], "habit3": [], "habit4": [], "habit5": [], "habit6": [], "habit7": [], "habit8": [], "day": current_day})
+
         channel = client.get_channel(966104456297074698)
-        embed = discord.Embed(title = "Project 50 Progress", color = 0x006494)
+        embed = discord.Embed(title = "Project 50 Progress - Day " + str(current_day), color = 0x006494)
         embed.add_field(name = "𝟭: Wake up before 8am", value = "🌅", inline = False)
         embed.add_field(name = "𝟮: Morning Routine: 1hr No Distractions", value = "📵", inline = False)
         embed.add_field(name = "𝟯: Exercise for 1 Hour a Day", value = "🏋🏿", inline = False)
@@ -330,13 +337,6 @@ async def project_50():
         embed.add_field(name = "𝟳: Journal Properly", value = "✍️", inline = False)
         embed.add_field(name = "𝟴: NoFap", value = "🧴", inline = False)
         message = await channel.send(embed = embed)
-
-        count = 0
-        for _ in collection.find():
-            count += 1
-        current_day = count + 1
-        proj50_id = message.id
-        post = collection.insert_one({"id": message.id, "date" : date, "habit1": [], "habit2": [], "habit3": [], "habit4": [], "habit5": [], "habit6": [], "habit7": [], "habit8": [], "day": current_day})
 
         emojis = ["🌅", "📵", "🏋🏿", "📖", "👨‍💻", "🍳", "✍️", "🧴"]
         for emoji in emojis:
