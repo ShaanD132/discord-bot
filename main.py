@@ -323,7 +323,6 @@ async def project_50():
         for _ in collection.find():
             count += 1
         current_day = count + 1
-        proj50_id = message.id
         post = collection.insert_one({"id": message.id, "date" : date, "habit1": [], "habit2": [], "habit3": [], "habit4": [], "habit5": [], "habit6": [], "habit7": [], "habit8": [], "day": current_day})
 
         channel = client.get_channel(966104456297074698)
@@ -338,6 +337,7 @@ async def project_50():
         embed.add_field(name = "𝟴: NoFap", value = "🧴", inline = False)
         message = await channel.send(embed = embed)
 
+        proj50_id = message.id
         emojis = ["🌅", "📵", "🏋🏿", "📖", "👨‍💻", "🍳", "✍️", "🧴"]
         for emoji in emojis:
             await message.add_reaction(emoji)
