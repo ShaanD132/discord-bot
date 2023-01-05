@@ -4,6 +4,7 @@ import pymongo
 import os
 import asyncio
 import random
+from datetime import datetime
 
 token = os.getenv("DISCORD_TOKEN")
 
@@ -14,6 +15,7 @@ intents.messages = True
 intents.message_content = True
 intents.presences = True
 intents.members = True
+intents.reactions = True
 
 client = discord.Client(intents=intents)
 
@@ -22,6 +24,8 @@ juno_channels = [636804198918258698, 458678727916912640, 797415731494780978, 458
 
 hottie_arr = [0] * 10
 count = [0]
+proj50_id = 0
+start_proj50 = "2023/1/5"
 
 def get_url():
     valid = False
@@ -49,6 +53,7 @@ def get_url():
 async def on_ready():
     print("Logged in.")
     time.start()
+    project_50.start()
 
 @client.event
 async def on_message(message):
@@ -195,6 +200,7 @@ async def on_message(message):
 
         embed.add_field(name = name_str1, value = time_str1, inline = False)
         await message.channel.send(embed = embed)
+
     if message.content.startswith("$alone_lb"):
         id1 = message.guild.id
         if (id1 == 824339628424167464):
@@ -217,7 +223,7 @@ async def on_message(message):
                     users[j] = users[j+1]
                     users[j+1] = temp1
         embed = discord.Embed(title = "Alone Leaderboard", description = "", color = 0x42559e)
-        
+
         for i in range(10):
             time_h = times[i] // 60
             time_m = times[i] % 60
@@ -251,6 +257,88 @@ async def on_message(message):
         embed = discord.Embed(title = "Hottie 💯", color = 0x5dc299)
         embed.set_image(url = url)
         await message.channel.send(embed = embed)
+
+    if message.content.startswith("$test"):
+        channel = client.get_channel(936365381680005171)
+        message = await channel.fetch_message(1060491005981380648)
+        print(message.reactions)
+
+
+
+@client.event
+async def on_raw_reaction_add(payload):
+    message_id = payload.message_id
+    db = mongo.lebbk
+    collection = db["proj50"]
+    post = collection.find_one({"id": message_id})
+    if (post != None):
+        new_user = payload.user_id
+        if (new_user != 824524451873292319):
+            emoji_reaction = str(payload.emoji)
+            emojis = ["🌅", "📵", "🏋🏿", "📖", "👨‍💻", "🍳", "✍️", "🧴"]
+            for i in range(len(emojis)):
+                if (emojis[i] == emoji_reaction):
+                    habit_id = "habit" + str(i+1)
+                    users = post[habit_id]
+                    users.append(new_user)
+                    collection.update_one({"id": message_id}, { "$set": { habit_id:  users} })
+
+@client.event
+async def on_raw_reaction_remove(payload):
+    message_id = payload.message_id
+    db = mongo.lebbk
+    collection = db["proj50"]
+    post = collection.find_one({"id": message_id})
+    if (post != None):
+        new_user = payload.user_id
+        if (new_user != 824524451873292319):
+            emoji_reaction = str(payload.emoji)
+            emojis = ["🌅", "📵", "🏋🏿", "📖", "👨‍💻", "🍳", "✍️", "🧴"]
+            for i in range(len(emojis)):
+                if (emojis[i] == emoji_reaction):
+                    habit_id = "habit" + str(i+1)
+                    users = post[habit_id]
+                    users.remove(new_user)
+                    collection.update_one({"id": message_id}, { "$set": { habit_id:  users} })
+
+@tasks.loop(hours = 2)
+async def project_50():
+    global proj50_id
+    db = mongo.lebbk
+    collection = db["proj50"]
+    exists = False
+
+    c = datetime.now()
+    c_year = c.year
+    c_month = c.month
+    c_day = c.day
+    date = str(c_year) + "/" + str(c_month) + "/"+ str(c_day)
+
+    for post in collection.find():
+        if (post["date"] == date):
+            exists = True
+
+    if (exists == False):
+        channel = client.get_channel(966104456297074698)
+        embed = discord.Embed(title = "Project 50 Progress", color = 0x13293D)
+        embed.add_field(name = "𝟭: Wake up before 8am", value = "🌅", inline = False)
+        embed.add_field(name = "𝟮: Morning Routine: 1hr No Distractions", value = "📵", inline = False)
+        embed.add_field(name = "𝟯: Exercise for 1 Hour a Day", value = "🏋🏿", inline = False)
+        embed.add_field(name = "𝟰: Read 10 Pages a Day", value = "📖", inline = False)
+        embed.add_field(name = "𝟱: Dedicate 1 Hour to a New Skill", value = "👨‍💻", inline = False)
+        embed.add_field(name = "𝟲: Follow a Healthy Diet", value = "🍳", inline = False)
+        embed.add_field(name = "𝟳: Journal Properly", value = "✍️", inline = False)
+        embed.add_field(name = "𝟴: NoFap", value = "🧴", inline = False)
+        message = await channel.send(embed = embed)
+        proj50_id = message.id
+        post = collection.insert_one({"id": message.id, "date" : date, "habit1": [], "habit2": [], "habit3": [], "habit4": [], "habit5": [], "habit6": [], "habit7": [], "habit8": []})
+
+        emojis = ["🌅", "📵", "🏋🏿", "📖", "👨‍💻", "🍳", "✍️", "🧴"]
+        for emoji in emojis:
+            await message.add_reaction(emoji)
+    else:
+        print("alr exists")
+        print(date)
 
 @tasks.loop(seconds = 60)
 async def time():
