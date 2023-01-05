@@ -320,7 +320,7 @@ async def project_50():
 
     if (exists == False):
         channel = client.get_channel(966104456297074698)
-        embed = discord.Embed(title = "Project 50 Progress", color = 0x13293D)
+        embed = discord.Embed(title = "Project 50 Progress", color = 0x006494)
         embed.add_field(name = "𝟭: Wake up before 8am", value = "🌅", inline = False)
         embed.add_field(name = "𝟮: Morning Routine: 1hr No Distractions", value = "📵", inline = False)
         embed.add_field(name = "𝟯: Exercise for 1 Hour a Day", value = "🏋🏿", inline = False)
