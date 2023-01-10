@@ -4,7 +4,7 @@ import pymongo
 import os
 import asyncio
 import random
-from datetime import datetime
+from datetime import date, timedelta
 
 token = os.getenv("DISCORD_TOKEN")
 mongo = pymongo.MongoClient("mongodb+srv://shaand:Sana132@lebbk.urxltwo.mongodb.net/?retryWrites=true&w=majority")
@@ -262,6 +262,56 @@ async def on_message(message):
         message = await channel.fetch_message(1060491005981380648)
         print(message.reactions)
 
+    if message.content.startswith("$proj50"):
+        message1= message.content.split(" ")
+        names = ["ashley", "brandon", "dylan", "kushveer", "lau", "nikhil", "shaan", "yaseen"]
+        ids = [881783277277573120, 424502958005288964, 955905841675006014, 211727586638692352, 731513674665033768, 313314610885165056, 211893329984618496, 426048762780319744]
+        if (len(message1) > 1):
+            message1[1] = message1[1].lower()
+            if (message1[1] == "list" or message1[1] == "List"):
+                embed = discord.Embed(title = "Possible Names", description = "Ashley, Brandon, Dylan, Kushveer, Lau, Nikhil, Shaan, Yaseen", color = 0xEFABFF)
+            elif (message1[1] not in names):
+                embed = discord.Embed(title = "Invalid Name", description = "Please do $proj50 list to see members taking part in the program.", color = 0xA3333D)
+            else:
+                index = names.index(message1[1])
+                embed = discord.Embed(title = "Habit Progress", description = "How " + message1[1].capitalize() + " has been progressing", color = 0xF61067)
+                search_id = ids[index]
+                db = mongo.lebbk
+                collection = db["proj50"]
+                habits = ["Waking up Early", "Morning Routine", "Exercise", "Reading", "New Skill", "Healthy Diet", "Journaling", "No Fap"]
+
+                for i in range (1, 9):
+                    t_count = 0
+                    count = 0
+                    field_name = "habit" + str(i)
+                    for post in collection.find():
+                        arr = post[field_name]
+                        t_count += 1
+                        if (search_id in arr):
+                            count += 1
+                    if (i == 3 or i == 5 or i == 7):
+                        embed.add_field(name = "\u200b", value = "\u200b", inline = True)
+                        embed.add_field(name = habits[i-1], value = str(count) + " day(s) out of " + str(t_count), inline = True)
+                    else:
+                        embed.add_field(name = "\u200b", value = "\u200b", inline = True)
+                        embed.add_field(name = habits[i-1], value = str(count) + " day(s) out of " + str(t_count), inline = True)
+
+                streak_count = 0
+                t_count = 0
+                for post in collection.find():
+                    t_count += 1
+                    habit_count = 0
+                    for j in range(1, 9):
+                        field_name = "habit" + str(j)
+                        arr = post[field_name]
+                        if (search_id in arr):
+                            habit_count += 1
+                    if (habit_count == 8):
+                        streak_count += 1
+                    else:
+                        streak_count = 0
+                embed.add_field(name = "Proj 50", value = str(streak_count) + " day(s) out of " + str(t_count))
+        await message.channel.send(embed = embed)
 
 
 @client.event
@@ -307,23 +357,56 @@ async def project_50():
     collection = db["proj50"]
     exists = False
 
-    c = datetime.now()
-    c_year = c.year
-    c_month = c.month
-    c_day = c.day
-    date = str(c_year) + "/" + str(c_month) + "/"+ str(c_day)
+    tdy = date.today()
+    yesterday = tdy - timedelta(days = 1)
+
+    tdy = tdy.strftime("%Y/%m/%d")
+    yesterday = yesterday.strftime("%Y/%m/%d")
+
+    tdy = str(tdy)
+    yesterday = str(yesterday)
+    print(yesterday)
+    date1 = tdy
 
     for post in collection.find():
-        if (post["date"] == date):
+        if (post["date"] == date1):
             exists = True
 
     if (exists == False):
+        names = ["ashley", "brandon", "dylan", "kushveer", "lau", "nikhil", "shaan", "yaseen"]
+        ids = [881783277277573120, 424502958005288964, 955905841675006014, 211727586638692352, 731513674665033768, 313314610885165056, 211893329984618496, 426048762780319744]
+        habits = ["Waking up Early", "Morning Routine", "Exercise", "Reading", "New Skill", "Healthy Diet", "Journaling", "No Fap"]
+        embed_yesterday = discord.Embed(title = "Recap of Yesterday", description = "How Le Bobok did:", color = 0xF0803C)
+        for i in range(1, 9):
+            field_name = "habit" + str(i)
+            people = []
+            post = collection.find_one({"date": yesterday})
+            arr = post[field_name]
+
+            for j in range(0, len(names)):
+                if (ids[j] in arr):
+                    people.append(names[j])
+
+            name_string = ""
+            for person in people:
+                if (name_string != ""):
+                    name_string = name_string + ", " + person.capitalize()
+                else:
+                    name_string = person.capitalize()
+            if name_string == "":
+                name_string = "Nobody"
+            embed_yesterday.add_field(name = habits[i-1], value = name_string, inline = True)
+
+        channel = client.get_channel(966104456297074698)
+        await channel.send(embed = embed_yesterday)
+
+
         count = 0
         for _ in collection.find():
             count += 1
         current_day = count + 1
 
-        channel = client.get_channel(966104456297074698)
+
         embed = discord.Embed(title = "Project 50 Progress - Day " + str(current_day), color = 0x006494)
         embed.add_field(name = "𝟭: Wake up before 8am", value = "🌅", inline = False)
         embed.add_field(name = "𝟮: Morning Routine: 1hr No Distractions", value = "📵", inline = False)
@@ -335,14 +418,14 @@ async def project_50():
         embed.add_field(name = "𝟴: NoFap", value = "🧴", inline = False)
         message = await channel.send(embed = embed)
 
-        post = collection.insert_one({"id": message.id, "date" : date, "habit1": [], "habit2": [], "habit3": [], "habit4": [], "habit5": [], "habit6": [], "habit7": [], "habit8": [], "day": current_day})
+        post = collection.insert_one({"id": message.id, "date" : date1, "habit1": [], "habit2": [], "habit3": [], "habit4": [], "habit5": [], "habit6": [], "habit7": [], "habit8": [], "day": current_day})
         proj50_id = message.id
         emojis = ["🌅", "📵", "🏋🏿", "📖", "👨‍💻", "🍳", "✍️", "🧴"]
         for emoji in emojis:
             await message.add_reaction(emoji)
     else:
         print("alr exists")
-        print(date)
+        print(date1)
 
 @tasks.loop(seconds = 60)
 async def time():
