@@ -52,7 +52,7 @@ def get_url():
 async def on_ready():
     print("Logged in.")
     time.start()
-    project_50.start()
+    #project_50.start()
 
 @client.event
 async def on_message(message):
@@ -311,6 +311,37 @@ async def on_message(message):
                     else:
                         streak_count = 0
                 embed.add_field(name = "Proj 50", value = str(streak_count) + " day(s) out of " + str(t_count))
+        await message.channel.send(embed = embed)
+
+    if message.content.startswith("$book"):
+        message_c = message.content.split(" ")
+
+        count = 0
+        book_name = ""
+        while ("/" not in message_c[count]):
+            count += 1
+        for i in range (1, count):
+            book_name = book_name + message_c[i] + " "
+        deadline = message_c[count]
+
+        deadline_test = deadline.split("/")
+        valid_date = True
+
+        if (int(deadline_test[0]) > 31):
+            valid_date = False
+        if (int(deadline_test[1]) > 12):
+            valid_date = False
+        if (int(deadline_test[2]) > 2024):
+            valid_date = False
+
+        if valid_date == True:
+            db = mongo.lebbk
+            collection = db["books"]
+            collection.insert_one({"book name": book_name, "person": str(message.author.name), "deadline": deadline})
+            embed = discord.Embed(title = "Book Deadline", description = "We will message you when your deadline has arrived", color = 0x084B83)
+            embed.add_field(name = "Information", value = str(message.author.name).capitalize() + " should read " + book_name + " by " + deadline)
+        else:
+            embed = discord.Embed(title = "Book Deadline not set", description = "Invalid Date", color = 0x92374D)
         await message.channel.send(embed = embed)
 
 
