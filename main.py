@@ -407,7 +407,7 @@ async def project_50():
         current_day = count + 1
 
 
-        embed = discord.Embed(title = "Project 50 Progress - Day " + str(current_day), color = 0x006494)
+        embed = discord.Embed(title = "Project 50 Progress - Day " + str(current_day) + " - " + str(date1), color = 0x006494)
         embed.add_field(name = "𝟭: Wake up before 8am", value = "🌅", inline = False)
         embed.add_field(name = "𝟮: Morning Routine: 1hr No Distractions", value = "📵", inline = False)
         embed.add_field(name = "𝟯: Exercise for 1 Hour a Day", value = "🏋🏿", inline = False)
