@@ -321,6 +321,7 @@ async def on_message(message):
         book_name = ""
         start_date = date.today()
         start_date = start_date.strftime("%d/%m/%Y")
+        author = int(message.author.id)
         while ("/" not in message_c[count]):
             count += 1
         for i in range (1, count):
@@ -340,7 +341,7 @@ async def on_message(message):
         if valid_date == True:
             db = mongo.lebbk
             collection = db["books"]
-            collection.insert_one({"book name": book_name, "person": str(message.author.name), "deadline": deadline, "start_date": start_date})
+            collection.insert_one({"book name": book_name, "person": str(message.author.name), "deadline": deadline, "start_date": start_date, "id": author})
             embed = discord.Embed(title = "Book Deadline", description = "We will message you when your deadline has arrived", color = 0x084B83)
             embed.add_field(name = "Information", value = str(message.author.name).capitalize() + " should read " + book_name + " by " + deadline)
         else:
@@ -520,6 +521,8 @@ async def book_checker():
         if deadline == tdy:
             embed = discord.Embed(title = "Book Deadline Reached", description = "Last day to finish reading the book you selected", color = 0xA1C349)
             embed.add_field(name = post["book name"], value = "You set the deadline on " + post["start_date"])
+            author = client.get_user(post["id"])
+            await channel.send(author.mention)
             await channel.send(embed = embed)
 
 
