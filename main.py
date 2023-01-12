@@ -519,7 +519,7 @@ async def book_checker():
     for post in collection.find():
         deadline = post["deadline"]
         if deadline == tdy:
-            embed = discord.Embed(title = "Book Deadline Reached", description = "Last day to finish reading the book you selected", color = 0xA1C349)
+            embed = discord.Embed(title = "Book Deadline Reached", description = "Last day to finish reading the book you selected", color = 0xBF3100)
             embed.add_field(name = post["book name"], value = "You set the deadline on " + post["start_date"])
             author = client.get_user(post["id"])
             await channel.send(author.mention)
