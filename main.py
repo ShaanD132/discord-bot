@@ -518,7 +518,7 @@ async def book_checker():
     tdy = tdy.strftime("%d/%m/%Y")
     for post in collection.find():
         deadline = post["deadline"]
-        if deadline == tdy:
+        if deadline == tdy and post["sent"] == False:
             embed = discord.Embed(title = "Book Deadline Reached", description = "Last day to finish reading the book you selected", color = 0xBF3100)
             embed.add_field(name = post["book name"], value = "You set the deadline on " + post["start_date"])
             author = client.get_user(post["id"])
