@@ -341,7 +341,7 @@ async def on_message(message):
         if valid_date == True:
             db = mongo.lebbk
             collection = db["books"]
-            collection.insert_one({"book name": book_name, "person": str(message.author.name), "deadline": deadline, "start_date": start_date, "id": author})
+            collection.insert_one({"book name": book_name, "person": str(message.author.name), "deadline": deadline, "start_date": start_date, "id": author, "sent": False})
             embed = discord.Embed(title = "Book Deadline", description = "We will message you when your deadline has arrived", color = 0x084B83)
             embed.add_field(name = "Information", value = str(message.author.name).capitalize() + " should read " + book_name + " by " + deadline)
         else:
