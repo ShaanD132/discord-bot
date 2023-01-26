@@ -416,21 +416,22 @@ async def project_50():
             field_name = "habit" + str(i)
             people = []
             post = collection.find_one({"date": yesterday})
-            arr = post[field_name]
+            if post != None:
+                arr = post[field_name]
 
-            for j in range(0, len(names)):
-                if (ids[j] in arr):
-                    people.append(names[j])
+                for j in range(0, len(names)):
+                    if (ids[j] in arr):
+                        people.append(names[j])
 
-            name_string = ""
-            for person in people:
-                if (name_string != ""):
-                    name_string = name_string + ", " + person.capitalize()
-                else:
-                    name_string = person.capitalize()
-            if name_string == "":
-                name_string = "Nobody"
-            embed_yesterday.add_field(name = habits[i-1], value = name_string, inline = True)
+                name_string = ""
+                for person in people:
+                    if (name_string != ""):
+                        name_string = name_string + ", " + person.capitalize()
+                    else:
+                        name_string = person.capitalize()
+                if name_string == "":
+                    name_string = "Nobody"
+                embed_yesterday.add_field(name = habits[i-1], value = name_string, inline = True)
 
         channel = client.get_channel(966104456297074698)
         await channel.send(embed = embed_yesterday)
