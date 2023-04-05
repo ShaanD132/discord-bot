@@ -52,8 +52,8 @@ def get_url():
 async def on_ready():
     print("Logged in.")
     time.start()
-    project_50.start()
-    book_checker.start()
+    #project_50.start()
+    #book_checker.start()
 
 @client.event
 async def on_message(message):
